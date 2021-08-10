@@ -1,9 +1,7 @@
-from scipy.signal import butter
-from scipy.signal import lfilter, find_peaks, find_peaks_cwt
-import numpy as np
 import scipy.signal as ss
-from matplotlib import pyplot as plt
-import pandas as pd
+from scipy.signal import butter
+from scipy.signal import lfilter
+
 
 def butter_bandpass_filter(data, lowcut=0.83, highcut=2.33, fs=100, order=3):
     nyq = 0.5 * fs

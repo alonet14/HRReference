@@ -1,0 +1,2 @@
+class SignalModel():
+    pass
