@@ -9,6 +9,7 @@ import plotly.express as px
 import pandas as pd
 import utils_v1.butterworth_filter as btwf
 import controller.signal_generate as sng
+from scipy.fft import fft, fftfreq
 
 # ========config=============
 root_pro = pr.get_root_file(__file__)
@@ -101,24 +102,44 @@ def test():
 
 
 if __name__ == '__main__':
-    band_hr = (0.83, 2.33)
+    band_hr = (0.93, 2.23)
     band_rr = (0.167, 3.167)
     fs = 100
-    mtime = 15
+    mtime = 20
     snr = -10
     sig_gen = sng.SignalGenerate(band_hr=band_hr, band_rr=band_rr, snr=snr, fs=fs, mtime=mtime)
     data = sig_gen.gen_raw_singal()
 
     mtime_x = np.arange(0, mtime * 100, 1)
-    filter_data = btwf.butter_bandpass_filter(data[:, 6])
-    peaks = btwf.find_hr(data[:, 6])
+    filter_data = btwf.butter_bandpass_filter(data[6, :])
+    peaks = btwf.find_hr(data[6, :], order=3)
 
-    hb = sig_gen.hb
+    radar_gen = sng.RadarGen(0.83, 0.167)
+    i_sig = radar_gen.radar_data_gen()
 
-    hb_noise = sig_gen.hb_noise
-    plot2(mtime_x, hb[:, 6], hb_noise[:,6], 'test')
-    plot_with_peaks(x=mtime_x, y=filter_data/np.max( np.abs(filter_data)), peaks=peaks, name='radar data with peak')
+    # plot_with_peaks(x=np.arange(0, 2000, 1), y=i_sig[2,:], peaks=[], name='demo')
 
-    sig_handle=sng.SignalHandle()
-    for i in range(0, 5):
-        sig_handle.save_data_with_label(filter_data, 50)
+    data_f = fft(data[2, :])
+    xf = fftfreq(len(data_f), 1)
+
+    plot_with_peaks(x=xf, y=np.abs(data_f[0:len(data_f)]), peaks=[], name='test')
+    # plot_with_peaks(x=xf, y=np.abs(data_f[0:len(data_f)]), peaks=[], name='test')
+
+    # hb = sig_gen.hb
+    # hb_noise = sig_gen.hb_noise
+
+    # plot2(mtime_x, hb[6, :], hb_noise[6, :], 'test')
+    # plot2(mtime_x, data[6, :], [], 'data')
+    # plot_with_peaks(x=mtime_x, y=filter_data / np.max(np.abs(filter_data)), peaks=peaks, name='radar data with peak')
+    # numsig = mtime * fs
+    # for i in range(0, 5):
+    #     print('====Step {}========'.format(i))
+    #     sig_handle = sng.SignalHandle()
+    #     sig_gen = sng.SignalGenerate(band_hr=band_hr, band_rr=band_rr, snr=snr, fs=fs, mtime=mtime)
+    #     data = sig_gen.gen_raw_singal()
+    #     for col in range(0, numsig):
+    #         filter_data = btwf.butter_bandpass_filter(data[:, col])
+    #         peaks = btwf.find_hr(data[:, col])
+    #         label = len(peaks) * 3
+    #         print(label)
+    #         sig_handle.save_data_with_label(filter_data, label)

@@ -1,5 +1,7 @@
 import errno
 import pathlib
+import random
+
 import pandas as pd
 import numpy as np
 from komm import AWGNChannel
@@ -7,6 +9,8 @@ import control
 import os
 import pathlib as pl
 from csv import writer
+import random as rd
+
 
 class SignalGenerate():
     def __init__(self, band_hr, band_rr, snr, fs, mtime):
@@ -21,7 +25,6 @@ class SignalGenerate():
     def awgn(self, s, SNRdB, L=1):
         # author - Mathuranathan Viswanathan (gaussianwaves.com
         # This code is part of the book Digital Modulations using Python
-
         from numpy import sum, isrealobj, sqrt
         from numpy.random import standard_normal
         """
@@ -56,11 +59,14 @@ class SignalGenerate():
             self.band_hr)
         sample = np.arange(0, numsig, 1)
         t = sample / self.fs
+        print(np.pi)
+        # hb = cos(
+        # 2 * pi * (centerfreq * t - 0.1 * cos(2 * pi * t / 100 + 2 * pi * rand) / (2 * pi / 100)) + 2 * pi * rand);
         hb = np.cos(2 * np.pi *
-                    (center_freq * t - 0.1 * np.cos(2 * np.pi * t / 100 + 2 * np.pi * np.random.rand()) /
-                     (2 * np.pi / 100)
-                     ) + 2 * np.pi * np.random.rand()
-                    )
+                    (center_freq * t - 0.1 * np.cos(2 * np.pi * t / 100)) /
+                    (2 * np.pi / 100)
+                    ) + 2 * np.pi * np.random.random_sample((numsig, numsig)
+                                                            )
         self.hb = hb
         return hb
 
@@ -76,7 +82,8 @@ class SignalGenerate():
             r = awgn(data)
             noise_matrix[i, :] = r
         self.hb_noise = s + noise_matrix
-        return s + noise_matrix
+
+        return s
 
     def _signal_rr(self):
         numsig = self.fs * self.mtime
@@ -87,8 +94,72 @@ class SignalGenerate():
         return rb
 
     def gen_raw_singal(self):
-        r = self.gen_hr_with_noise() + self._signal_rr()
+        # r = self.gen_hr_with_noise() + self._signal_rr()
+        r = self._signal_hr_without_noise()
         return r
+
+
+class RadarGen():
+    def __init__(self, hr_freq, rr_freq):
+        self.hr_freq = hr_freq
+        self.rr_freq = rr_freq
+
+    def radar_data_gen(self):
+        AI = 2
+        wavelength = 0.0125
+        freq_heart = 0.83 + np.random.rand() * (2.33 - 0.83)
+        freq_lung = 0.167 + np.random.rand() * (0.367 - 0.167)
+        heart_am = 0.1
+        lung_am = 3
+        t = np.arange(0, 20, 0.01)
+        ran_phase_lung = 2 * np.pi * np.random.rand()
+        ran_phase_heart = 2 * np.pi * np.random.rand()
+        noise = np.empty((2, len(t)))
+        for i in range(0, len(t)):
+            ran_frequency = 12 * np.random.rand()
+            noise[0, i] = ran_frequency
+            ran_am = 5 * np.random.rand()
+            noise[1, i] = ran_am
+
+        i_signal = lung_am * np.sin(2 * np.pi * freq_lung * t + ran_phase_lung) + heart_am * np.sin(
+            2 * np.pi * freq_heart * t + ran_phase_heart)
+
+        self.lung_signal=lung_am * np.sin(2 * np.pi * freq_lung * t + ran_phase_lung)
+        self.heart_signal=heart_am * np.sin(2 * np.pi * freq_heart * t + ran_phase_heart)
+        print(np.sin(np.pi/2))
+        # self.noise=np.empty_like((1, len(t)))
+        noise_total=np.empty((1, len(t)), dtype='float64')
+
+        for j in range(0, len(t)):
+            noise_total+=noise[1, j] * np.sin(2 * np.pi * noise[0, j]*t + 2 * np.pi * np.random.rand())
+        self.noise=noise_total
+        noise_total=noise_total/np.max(np.abs(noise_total))*7
+        i_signal+=noise_total[0]
+        print(self.noise)
+        return i_signal
+
+    def gen_hr_freq(self, center_fre):
+        pass
+
+    def gen_noise_in_hr_band(self, am_noise=0.006):
+        mtime = 1689
+        numsig = 1689
+        am_arr = np.empty(numsig)
+        freq_arr = np.empty(numsig)
+
+        for i in range(0, mtime):
+            amptitude = np.random.rand() * am_noise
+            freq = np.random.rand() * (3 - 0.83) + 0.83
+            am_arr[i] = amptitude
+            freq_arr[i] = freq
+
+        return am_arr, freq_arr
+
+    def gen_freq_spectrum(self):
+        pass
+
+    def gen_freq_noise_out_hr_band(self):
+        pass
 
 
 class SignalHandle():
@@ -101,7 +172,6 @@ class SignalHandle():
         :param file_name: name of the file need to find
         :return: path of the file
         """
-
         from sys import platform
         root_file = str(pl.Path(__file__).parent.parent)
         train_file_path = ""
@@ -123,23 +193,15 @@ class SignalHandle():
         return train_file_path
 
     def save_data_with_label(self, data, label):
-
         """
-
         :param data:
         :param label: int, heart rate number
-
         :return: void
         """
-
         file_name = 'label_{}'.format(label)
-        file_path=self.search_label_file(file_name)
-        file_path=pathlib.Path(file_path)
-        with open(file_path, 'a') as f:
-            write_csv=writer(f)
+        file_path = self.search_label_file(file_name)
+        file_path = pathlib.Path(file_path)
+        with open(file_path, 'a', newline='') as f:
+            write_csv = writer(f)
             write_csv.writerow(data)
             f.close()
-
-
-
-

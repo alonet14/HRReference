@@ -22,7 +22,7 @@ def butter_lowpass_filter(data, fs=100, fr=0.5, order=5):
 
 
 # Loc tin hieu nhip tim
-def find_hr(data, lowcut=0.83, highcut=2.33, fs=100, order=3, distance=51, width=2.5):
+def find_hr(data, lowcut=0.83, highcut=2.33, fs=100, order=5, distance=60, width=2.5):
     hr = butter_bandpass_filter(data, lowcut=lowcut, highcut=highcut, fs=fs, order=order)
     threshold_hr = (max(hr) - min(hr)) * 0.01  # muc nguong
     peaks, _ = ss.find_peaks(hr, distance=distance, height=threshold_hr, width=width)
