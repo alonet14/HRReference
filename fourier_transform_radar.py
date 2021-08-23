@@ -62,7 +62,7 @@ def test_signal_render():
 
 
 
-def analyse_real_data():
+def analyse_real_data(index):
     parent_folder=pathlib.Path(__file__).parent
     parent_folder = str(parent_folder)+"/data/radar"
     list_path=[]
@@ -71,7 +71,7 @@ def analyse_real_data():
             file_path=root + '/' + f
             list_path.append(file_path)
     print(list_path)
-    i_path=8
+    i_path=index
     get_file = list_path[i_path]
 
     #==========================analyse real data =====================
@@ -85,13 +85,16 @@ def analyse_real_data():
 
     #==================analyse frequency spectrum============
     data_f=fft(data)
+    len_data=len(data_f)
     xf=fftfreq(len(data), 1/fs)
-    fig2=px.line(x=xf, y=np.abs(data_f), title='frequency domain')
+    fig2=px.line(x=xf, y=2/len_data*np.abs(data_f), title='frequency domain')
     fig2.show()
 
 
 
 if __name__ == '__main__':
-    # analyse_real_data()
+    index_file=1
 
-    test_signal_render()
+    analyse_real_data(index_file)
+
+    # test_signal_render()
