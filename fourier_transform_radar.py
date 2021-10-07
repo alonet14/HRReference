@@ -70,14 +70,11 @@ def analyse_real_data(index):
         for f in filenames:
             file_path=root + '/' + f
             list_path.append(file_path)
-    print(list_path)
     i_path=index
     get_file = list_path[i_path]
 
     #==========================analyse real data =====================
     data = read_txt_data(file_path=get_file)
-    print(data)
-
     fs=100
     time=np.arange(0, len(data)/fs, 1/fs)
     fig = px.line(x=time, y=data, title='radar data')
@@ -90,11 +87,38 @@ def analyse_real_data(index):
     fig2=px.line(x=xf, y=2/len_data*np.abs(data_f), title='frequency domain')
     fig2.show()
 
+def analyse_test_gened_data():
+    import utils_v1.file_utils.file_pandas as read_file_pandas
+    parent_folder = "E:\\lab_project\\hr_processing\\data\\data_gen"
+    freq_file = parent_folder + "\\" + "\\frequency.csv"
+    data_folder = parent_folder + "\\" + "\\data"
+    list_file = read_file_pandas.get_list_file(data_folder)
+
+    # ======read frequency====
+    freq_list = read_file_pandas.read_csv_file(freq_file)
+    freq_list = freq_list.freq[0:9]
+
+    chosen_file = list_file[2]
+    data = read_file_pandas.read_csv_file(chosen_file)
+    data = data.data
+    print(data)
+    time = np.arange(0, 20, 0.01)
+    fig = px.line(x=time, y=data, title='test')
+    fig.show()
+
+
+    #==================analyse frequency spectrum============
+    data = np.asarray(data)
+    data_f = fft(data)
+    len_data = len(data_f)
+    xf = fftfreq(len(data), 1 / 100)
+    fig2 = px.line(x=xf, y=2 / len_data * np.abs(data_f), title='frequency domain')
+    fig2.show()
 
 
 if __name__ == '__main__':
     index_file=1
 
     analyse_real_data(index_file)
-
+    analyse_test_gened_data()
     # test_signal_render()

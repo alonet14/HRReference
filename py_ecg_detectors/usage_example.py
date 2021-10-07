@@ -4,7 +4,7 @@ import pathlib
 from ecgdetectors import Detectors
 import plotly.express as px
 
-from utils_v1.pandas_handler import read_file_pandas
+from utils_v1.file_utils import file_pandas
 
 
 def plot(x, y):
@@ -17,8 +17,8 @@ if __name__ == '__main__':
 
     example_dir = 'E:\lab_project\hr_processing\data'
 
-    list_data_file = read_file_pandas.get_list_file(example_dir)
-    data = list(read_file_pandas.read_file(list_data_file[2], 1).index)
+    list_data_file = file_pandas.get_list_file(example_dir)
+    data = list(file_pandas.read_file(list_data_file[2], 1).index)
     data_np = np.asarray(data, dtype=np.float64)
     data_np = data_np[1000:3000]
 

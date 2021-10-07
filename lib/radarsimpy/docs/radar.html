@@ -1,0 +1,536 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Radar Model &mdash; RadarSimPy  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Simulator" href="sim.html" />
+    <link rel="prev" title="Coordinate Systems" href="coordinate.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> RadarSimPy
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Instruction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dependence.html">Dependence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coordinate.html">Coordinate Systems</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Radar Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#radarsimpy-transmitter">radarsimpy.Transmitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#radarsimpy-receiver">radarsimpy.Receiver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#radarsimpy-radar">radarsimpy.Radar</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sim.html">Simulator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rt.html">Raytracing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="process.html">Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">RadarSimPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Radar Model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/radar.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="radar-model">
+<h1>Radar Model<a class="headerlink" href="#radar-model" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="radarsimpy-transmitter">
+<h2>radarsimpy.Transmitter<a class="headerlink" href="#radarsimpy-transmitter" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="radarsimpy.Transmitter">
+<em class="property">class </em><code class="sig-prename descclassname">radarsimpy.</code><code class="sig-name descname">Transmitter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em>, <em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">f_offset</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tx_power</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">prp</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pulses</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">pn_f</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pn_power</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">channels</span><span class="o">=</span><span class="default_value">[{'location': (0, 0, 0)}]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#radarsimpy.Transmitter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class defines basic parameters of a radar transmitter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>float</em><em> or </em><em>numpy.1darray</em>) – <p>Waveform frequency (Hz).
+If <code class="docutils literal notranslate"><span class="pre">f</span></code> is a single number, all the pulses have
+the same center frequency.</p>
+<p>For linear modulation, specify <code class="docutils literal notranslate"><span class="pre">f</span></code> with <code class="docutils literal notranslate"><span class="pre">[f_start,</span> <span class="pre">f_stop]</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">f</span></code> can alse be a 1-D array of an arbitrary waveform, specify
+the time with <code class="docutils literal notranslate"><span class="pre">t</span></code>.</p>
+</p></li>
+<li><p><strong>t</strong> (<em>float</em><em> or </em><em>numpy.1darray</em>) – Timing of each pulse (s).</p></li>
+<li><p><strong>f_offset</strong> (<em>numpy.1darray</em>) – Frequency offset for each pulse (Hz). The length must be the same
+as <code class="docutils literal notranslate"><span class="pre">pulses</span></code>.</p></li>
+<li><p><strong>tx_power</strong> (<em>float</em>) – Transmitter power (dBm)</p></li>
+<li><p><strong>prp</strong> (<em>float</em>) – <p>Pulse repetition period (s). <code class="docutils literal notranslate"><span class="pre">prp</span> <span class="pre">&gt;=</span>
+<span class="pre">pulse_length</span></code>. If it is <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">prp</span> <span class="pre">=</span>
+<span class="pre">pulse_length</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">prp</span></code> can alse be a 1-D array to specify
+different repetition period for each pulse. In this case, the
+length of the 1-D array should equals to the length
+of <code class="docutils literal notranslate"><span class="pre">pulses</span></code></p>
+</p></li>
+<li><p><strong>pulses</strong> (<em>int</em>) – Total number of pulses</p></li>
+<li><p><strong>pn_f</strong> (<em>numpy.1darray</em>) – Frequency of the phase noise (Hz)</p></li>
+<li><p><strong>pn_power</strong> (<em>numpy.1darray</em>) – Power of the phase noise (dB/Hz)</p></li>
+<li><p><strong>channels</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>) – <p>Properties of transmitter channels</p>
+<p>[{</p>
+<ul>
+<li><dl class="simple">
+<dt><strong>location</strong> (<em>numpy.1darray</em>) –</dt><dd><p>3D location of the channel [x. y. z] (m)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>delay</strong> (<em>float</em>) –</dt><dd><p>Transmit delay (s). <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">0</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>azimuth_angle</strong> (<em>numpy.1darray</em>) –</dt><dd><p>Angles for azimuth pattern (deg). <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">[-90,</span> <span class="pre">90]</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>azimuth_pattern</strong> (<em>numpy.1darray</em>) –</dt><dd><p>Azimuth pattern (dB). <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">[0,</span> <span class="pre">0]</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>elevation_angle</strong> (<em>numpy.1darray</em>) –</dt><dd><p>Angles for elevation pattern (deg). <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">[-90,</span> <span class="pre">90]</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>elevation_pattern</strong> (<em>numpy.1darray</em>) –</dt><dd><p>Elevation pattern (dB). <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">[0,</span> <span class="pre">0]</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>pulse_amp</strong> (<em>numpy.1darray</em>) –</dt><dd><p>Relative amplitude sequence for pulse’s amplitude modulation.
+The array length should be the same as <cite>pulses</cite>. <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">0</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>pulse_phs</strong> (<em>numpy.1darray</em>) –</dt><dd><p>Phase code sequence for pulse’s phase modulation (deg).
+The array length should be the same as <cite>pulses</cite>. <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">0</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>t_mod</strong> (<em>numpy.1darray</em>) –</dt><dd><p>Time stamps for waveform modulation (s). <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">None</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>phs</strong> (<em>numpy.1darray</em>) –</dt><dd><p>Phase scheme for waveform modulation (deg). <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">None</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>amp</strong> (<em>numpy.1darray</em>) –</dt><dd><p>Relative amplitude scheme for waveform modulation. <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">None</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>}]</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>fc</strong> (<em>numpy.1darray</em>) – Center frequency array for the pulses</p></li>
+<li><p><strong>pulse_length</strong> (<em>float</em>) – Dwell time of each pulse (s)</p></li>
+<li><p><strong>bandwidth</strong> (<em>float</em>) – Bandwith of each pulse (Hz)</p></li>
+<li><p><strong>tx_power</strong> (<em>float</em>) – Transmitter power (dBm)</p></li>
+<li><p><strong>prp</strong> (<em>numpy.1darray</em>) – Pulse repetition period (s)</p></li>
+<li><p><strong>pulses</strong> (<em>int</em>) – Total number of pulses</p></li>
+<li><p><strong>channels</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>) – Properties of transmitter channels</p></li>
+<li><p><strong>channel_size</strong> (<em>int</em>) – Number of transmitter channels</p></li>
+<li><p><strong>locations</strong> (<em>numpy.2darray</em>) – 3D location of the channels. Size of the aray is
+<code class="docutils literal notranslate"><span class="pre">[channel_size,</span> <span class="pre">3</span> <span class="pre">&lt;x,</span> <span class="pre">y,</span> <span class="pre">z&gt;]</span></code> (m)</p></li>
+<li><p><strong>az_angles</strong> (<em>list</em><em>[</em><em>numpy.1darray</em><em>]</em>) – Angles for each channel’s azimuth pattern (deg)</p></li>
+<li><p><strong>az_patterns</strong> (<em>list</em><em>[</em><em>numpy.1darray</em><em>]</em>) – Azimuth pattern for each channel (dB)</p></li>
+<li><p><strong>el_angles</strong> (<em>list</em><em>[</em><em>numpy.1darray</em><em>]</em>) – Angles for each channel’s elevation pattern (deg)</p></li>
+<li><p><strong>el_patterns</strong> (<em>list</em><em>[</em><em>numpy.1darray</em><em>]</em>) – Elevation pattern for each channel (dB)</p></li>
+<li><p><strong>az_func</strong> (<em>list</em>) – Azimuth patterns’ interpolation functions</p></li>
+<li><p><strong>el_func</strong> (<em>list</em>) – Elevation patterns’ interpolation functions</p></li>
+<li><p><strong>antenna_gains</strong> (<em>numpy.1darray</em>) – Antenna gain for each channel (dB).
+Antenna gain is <code class="docutils literal notranslate"><span class="pre">max(az_pattern)</span></code></p></li>
+<li><p><strong>pulse_phs</strong> (<em>list</em><em>[</em><em>numpy.1darray</em><em>]</em>) – Phase code sequence for phase modulation (deg)</p></li>
+<li><p><strong>chip_length</strong> (<em>numpy.1darray</em>) – Length for each phase code (s)</p></li>
+<li><p><strong>delay</strong> (<em>numpy.1darray</em>) – Delay for each channel (s)</p></li>
+<li><p><strong>polarization</strong> (<em>numpy.1darray</em>) – <p>Antenna polarization <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">z]</span></code>.</p>
+<ul>
+<li><p>Horizontal polarization: <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">0,</span> <span class="pre">0]</span></code></p></li>
+<li><p>Vertical polarization: <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">1]</span></code></p></li>
+</ul>
+</p></li>
+<li><p><strong>wavelength</strong> (<em>float</em>) – Wavelength (m)</p></li>
+<li><p><strong>slope</strong> (<em>float</em>) – Waveform slope, <code class="docutils literal notranslate"><span class="pre">bandwidth</span> <span class="pre">/</span> <span class="pre">pulse_length</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Waveform</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">|</span>                       <span class="n">prp</span>
+<span class="o">|</span>                  <span class="o">+-----------+</span>
+<span class="o">|</span>
+<span class="o">|</span>            <span class="o">+---</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">---&gt;</span>  <span class="o">/</span>            <span class="o">/</span>            <span class="o">/</span>
+<span class="o">|</span>                         <span class="o">/</span>            <span class="o">/</span>            <span class="o">/</span>
+<span class="o">|</span>                        <span class="o">/</span>            <span class="o">/</span>            <span class="o">/</span>
+<span class="o">|</span>                       <span class="o">/</span>            <span class="o">/</span>            <span class="o">/</span>
+<span class="o">|</span>                      <span class="o">/</span>            <span class="o">/</span>            <span class="o">/</span>     <span class="o">...</span>
+<span class="o">|</span>                     <span class="o">/</span>            <span class="o">/</span>            <span class="o">/</span>
+<span class="o">|</span>                    <span class="o">/</span>            <span class="o">/</span>            <span class="o">/</span>
+<span class="o">|</span>                   <span class="o">/</span>            <span class="o">/</span>            <span class="o">/</span>
+<span class="o">|</span>      <span class="o">+---</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">---&gt;/</span>            <span class="o">/</span>            <span class="o">/</span>
+<span class="o">|</span>
+<span class="o">|</span>                  <span class="o">+-------+</span>
+<span class="o">|</span>                 <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>    <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="o">|</span>
+<span class="o">|</span>    <span class="n">Pulse</span>         <span class="o">+--------------------------------------+</span>
+<span class="o">|</span>    <span class="n">modulation</span>    <span class="o">|</span><span class="n">pulse_amp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">|</span><span class="n">pulse_amp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">|</span><span class="n">pulse_amp</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">|</span>  <span class="o">...</span>
+<span class="o">|</span>                  <span class="o">|</span><span class="n">pulse_phs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">|</span><span class="n">pulse_phs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">|</span><span class="n">pulse_phs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">|</span>  <span class="o">...</span>
+<span class="o">|</span>                  <span class="o">+--------------------------------------+</span>
+<span class="o">|</span>
+<span class="o">|</span>    <span class="n">Waveform</span>      <span class="o">+--------------------------------------+</span>
+<span class="o">|</span>    <span class="n">modulation</span>    <span class="o">|</span>           <span class="n">amp</span> <span class="o">/</span> <span class="n">phs</span> <span class="o">/</span> <span class="n">t_mod</span>          <span class="o">|</span>  <span class="o">...</span>
+<span class="o">|</span>                  <span class="o">+--------------------------------------+</span>
+</pre></div>
+</div>
+<p>Tips:</p>
+<ul class="simple">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">bandwidth</span></code> to 0 get a tone waveform for a Doppler radar</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="radarsimpy-receiver">
+<h2>radarsimpy.Receiver<a class="headerlink" href="#radarsimpy-receiver" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="radarsimpy.Receiver">
+<em class="property">class </em><code class="sig-prename descclassname">radarsimpy.</code><code class="sig-name descname">Receiver</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">noise_figure</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">rf_gain</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">load_resistor</span><span class="o">=</span><span class="default_value">500</span></em>, <em class="sig-param"><span class="n">baseband_gain</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">channels</span><span class="o">=</span><span class="default_value">[{'location': (0, 0, 0)}]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#radarsimpy.Receiver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class defines basic parameters of a radar receiver</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fs</strong> (<em>float</em>) – Sampling rate (sps)</p></li>
+<li><p><strong>noise_figure</strong> (<em>float</em>) – Noise figure (dB)</p></li>
+<li><p><strong>rf_gain</strong> (<em>float</em>) – Total RF gain (dB)</p></li>
+<li><p><strong>load_resistor</strong> (<em>float</em>) – Load resistor to convert power to voltage (Ohm)</p></li>
+<li><p><strong>baseband_gain</strong> (<em>float</em>) – Total baseband gain (dB)</p></li>
+<li><p><strong>channels</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>) – <p>Properties of transmitter channels</p>
+<p>[{</p>
+<ul>
+<li><dl class="simple">
+<dt><strong>location</strong> (<em>numpy.1darray</em>) –</dt><dd><p>3D location of the channel [x. y. z] (m)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>azimuth_angle</strong> (<em>numpy.1darray</em>) –</dt><dd><p>Angles for azimuth pattern (deg). <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">[-90,</span> <span class="pre">90]</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>azimuth_pattern</strong> (<em>numpy.1darray</em>) –</dt><dd><p>Azimuth pattern (dB). <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">[0,</span> <span class="pre">0]</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>elevation_angle</strong> (<em>numpy.1darray</em>) –</dt><dd><p>Angles for elevation pattern (deg). <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">[-90,</span> <span class="pre">90]</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>elevation_pattern</strong> (<em>numpy.1darray</em>) –</dt><dd><p>Elevation pattern (dB). <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">[0,</span> <span class="pre">0]</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>}]</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>fs</strong> (<em>float</em>) – Sampling rate (sps)</p></li>
+<li><p><strong>noise_figure</strong> (<em>float</em>) – Noise figure (dB)</p></li>
+<li><p><strong>rf_gain</strong> (<em>float</em>) – Total RF gain (dB)</p></li>
+<li><p><strong>load_resistor</strong> (<em>float</em>) – Load resistor to convert power to voltage (Ohm)</p></li>
+<li><p><strong>baseband_gain</strong> (<em>float</em>) – Total baseband gain (dB)</p></li>
+<li><p><strong>noise_bandwidth</strong> (<em>float</em>) – Bandwidth in calculating the noise (Hz).
+<code class="docutils literal notranslate"><span class="pre">noise_bandwidth</span> <span class="pre">=</span> <span class="pre">fs</span> <span class="pre">/</span> <span class="pre">2</span></code></p></li>
+<li><p><strong>channels</strong> (<em>list</em><em>[</em><em>dict</em><em>]</em>) – Properties of receiver channels</p></li>
+<li><p><strong>channel_size</strong> (<em>int</em>) – Total number of receiver channels</p></li>
+<li><p><strong>locations</strong> (<em>numpy.2darray</em>) – 3D location of the channels. Size of the aray is
+<code class="docutils literal notranslate"><span class="pre">[channel_size,</span> <span class="pre">3</span> <span class="pre">&lt;x,</span> <span class="pre">y,</span> <span class="pre">z&gt;]</span></code> (m)</p></li>
+<li><p><strong>az_angles</strong> (<em>list</em><em>[</em><em>numpy.1darray</em><em>]</em>) – Angles for each channel’s azimuth pattern (deg)</p></li>
+<li><p><strong>az_patterns</strong> (<em>list</em><em>[</em><em>numpy.1darray</em><em>]</em>) – Azimuth pattern for each channel (dB)</p></li>
+<li><p><strong>el_angles</strong> (<em>list</em><em>[</em><em>numpy.1darray</em><em>]</em>) – Angles for each channel’s elevation pattern (deg)</p></li>
+<li><p><strong>el_patterns</strong> (<em>list</em><em>[</em><em>numpy.1darray</em><em>]</em>) – Elevation pattern for each channel (dB)</p></li>
+<li><p><strong>az_func</strong> (<em>list</em>) – Azimuth patterns’ interpolation functions</p></li>
+<li><p><strong>el_func</strong> (<em>list</em>) – Elevation patterns’ interpolation functions</p></li>
+<li><p><strong>antenna_gains</strong> (<em>numpy.1darray</em>) – Antenna gain for each channel (dB).
+Antenna gain is <code class="docutils literal notranslate"><span class="pre">max(az_pattern)</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Receiver noise</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">|</span>           <span class="o">+</span> <span class="n">n1</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">Boltzmann_constant</span> <span class="o">*</span> <span class="n">Ts</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="o">|</span>           <span class="o">|</span>      <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">noise_bandwidth</span><span class="p">)</span>  <span class="p">(</span><span class="n">dBm</span><span class="p">)</span>
+<span class="o">|</span>           <span class="n">v</span>
+<span class="o">|</span>    <span class="o">+------+------+</span>
+<span class="o">|</span>    <span class="o">|</span><span class="n">rf_gain</span>      <span class="o">|</span>
+<span class="o">|</span>    <span class="o">+------+------+</span>
+<span class="o">|</span>           <span class="o">|</span> <span class="n">n2</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">+</span> <span class="n">noise_figure</span> <span class="o">+</span> <span class="n">rf_gain</span> <span class="p">(</span><span class="n">dBm</span><span class="p">)</span>
+<span class="o">|</span>           <span class="n">v</span> <span class="n">n3</span> <span class="o">=</span> <span class="mf">1e-3</span> <span class="o">*</span> <span class="mi">10</span><span class="o">^</span><span class="p">(</span><span class="n">n2</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span> <span class="p">(</span><span class="n">Watts</span><span class="p">)</span>
+<span class="o">|</span>    <span class="o">+------+------+</span>
+<span class="o">|</span>    <span class="o">|</span><span class="n">mixer</span>        <span class="o">|</span>
+<span class="o">|</span>    <span class="o">+------+------+</span>
+<span class="o">|</span>           <span class="o">|</span> <span class="n">n4</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">n3</span> <span class="o">*</span> <span class="n">load_resistor</span><span class="p">)</span> <span class="p">(</span><span class="n">V</span><span class="p">)</span>
+<span class="o">|</span>           <span class="n">v</span>
+<span class="o">|</span>    <span class="o">+------+------+</span>
+<span class="o">|</span>    <span class="o">|</span><span class="n">baseband_gain</span><span class="o">|</span>
+<span class="o">|</span>    <span class="o">+------+------+</span>
+<span class="o">|</span>           <span class="o">|</span> <span class="n">noise</span> <span class="n">amplitude</span> <span class="p">(</span><span class="n">peak</span> <span class="n">to</span> <span class="n">peak</span><span class="p">)</span>
+<span class="o">|</span>           <span class="n">v</span> <span class="n">n5</span> <span class="o">=</span> <span class="n">n4</span> <span class="o">*</span> <span class="mi">10</span><span class="o">^</span><span class="p">(</span><span class="n">baseband_gain</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">(</span><span class="n">V</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="radarsimpy-radar">
+<h2>radarsimpy.Radar<a class="headerlink" href="#radarsimpy-radar" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="radarsimpy.Radar">
+<em class="property">class </em><code class="sig-prename descclassname">radarsimpy.</code><code class="sig-name descname">Radar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transmitter</span></em>, <em class="sig-param"><span class="n">receiver</span></em>, <em class="sig-param"><span class="n">time</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#radarsimpy.Radar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class defines basic parameters of a radar system</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>transmitter</strong> (<a class="reference internal" href="#radarsimpy.Transmitter" title="radarsimpy.Transmitter"><em>Transmitter</em></a>) – Radar transmiter</p></li>
+<li><p><strong>receiver</strong> (<a class="reference internal" href="#radarsimpy.Receiver" title="radarsimpy.Receiver"><em>Receiver</em></a>) – Radar Receiver</p></li>
+<li><p><strong>time</strong> (<em>float</em><em> or </em><em>numpy.1darray</em>) – Radar firing time instances / frames</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – Seed for noise generator</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>transmitter</strong> (<a class="reference internal" href="#radarsimpy.Transmitter" title="radarsimpy.Transmitter"><em>Transmitter</em></a>) – Radar transmiter</p></li>
+<li><p><strong>receiver</strong> (<a class="reference internal" href="#radarsimpy.Receiver" title="radarsimpy.Receiver"><em>Receiver</em></a>) – Radar Receiver</p></li>
+<li><p><strong>samples_per_pulse</strong> (<em>int</em>) – Number of samples in one pulse</p></li>
+<li><p><strong>channel_size</strong> (<em>int</em>) – Total number of channels.
+<code class="docutils literal notranslate"><span class="pre">channel_size</span> <span class="pre">=</span> <span class="pre">transmitter.channel_size</span> <span class="pre">*</span> <span class="pre">receiver.channel_size</span></code></p></li>
+<li><p><strong>virtual_array</strong> (<em>numpy.2darray</em>) – Locations of virtual array elements. [channel_size, 3 &lt;x, y, z&gt;]</p></li>
+<li><p><strong>max_range</strong> (<em>float</em>) – Maximum range for an FMCW mode (m).
+<code class="docutils literal notranslate"><span class="pre">max_range</span> <span class="pre">=</span> <span class="pre">c</span> <span class="pre">*</span> <span class="pre">fs</span> <span class="pre">*</span> <span class="pre">pulse_length</span> <span class="pre">/</span> <span class="pre">bandwidth</span> <span class="pre">/</span> <span class="pre">2</span></code></p></li>
+<li><p><strong>unambiguous_speed</strong> (<em>float</em>) – Unambiguous speed (m/s).
+<code class="docutils literal notranslate"><span class="pre">unambiguous_speed</span> <span class="pre">=</span> <span class="pre">c</span> <span class="pre">/</span> <span class="pre">prp</span> <span class="pre">/</span> <span class="pre">fc</span> <span class="pre">/</span> <span class="pre">2</span></code></p></li>
+<li><p><strong>range_resolution</strong> (<em>float</em>) – Range resolution (m).
+<code class="docutils literal notranslate"><span class="pre">range_resolution</span> <span class="pre">=</span> <span class="pre">c</span> <span class="pre">/</span> <span class="pre">2</span> <span class="pre">/</span> <span class="pre">bandwidth</span></code></p></li>
+<li><p><strong>timestamp</strong> (<em>numpy.3darray</em>) – <p>Timestamp for each samples. Frame start time is
+defined in <code class="docutils literal notranslate"><span class="pre">time</span></code>.
+<code class="docutils literal notranslate"><span class="pre">[channes/frames,</span> <span class="pre">pulses,</span> <span class="pre">samples]</span></code></p>
+<p><em>Channel/frame order in timestamp</em></p>
+<p><em>[0]</em> <code class="docutils literal notranslate"><span class="pre">Frame[0]</span> <span class="pre">--</span> <span class="pre">Tx[0]</span> <span class="pre">--</span> <span class="pre">Rx[0]</span></code></p>
+<p><em>[1]</em> <code class="docutils literal notranslate"><span class="pre">Frame[0]</span> <span class="pre">--</span> <span class="pre">Tx[0]</span> <span class="pre">--</span> <span class="pre">Rx[1]</span></code></p>
+<p>…</p>
+<p><em>[N]</em> <code class="docutils literal notranslate"><span class="pre">Frame[0]</span> <span class="pre">--</span> <span class="pre">Tx[1]</span> <span class="pre">--</span> <span class="pre">Rx[0]</span></code></p>
+<p><em>[N+1]</em> <code class="docutils literal notranslate"><span class="pre">Frame[0]</span> <span class="pre">--</span> <span class="pre">Tx[1]</span> <span class="pre">--</span> <span class="pre">Rx[1]</span></code></p>
+<p>…</p>
+<p><em>[M]</em> <code class="docutils literal notranslate"><span class="pre">Frame[1]</span> <span class="pre">--</span> <span class="pre">Tx[0]</span> <span class="pre">--</span> <span class="pre">Rx[0]</span></code></p>
+<p><em>[M+1]</em> <code class="docutils literal notranslate"><span class="pre">Frame[1]</span> <span class="pre">--</span> <span class="pre">Tx[0]</span> <span class="pre">--</span> <span class="pre">Rx[1]</span></code></p>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="sim.html" class="btn btn-neutral float-right" title="Simulator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="coordinate.html" class="btn btn-neutral float-left" title="Coordinate Systems" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Zhengyu Peng.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

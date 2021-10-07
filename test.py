@@ -2,7 +2,7 @@ import os
 
 import numpy as np
 from utils_v1.config_path import project as pr
-from utils_v1.pandas_handler import read_file_pandas
+from utils_v1.file_utils import file_pandas
 import controller.data_ref_controller as data_ref_controller
 import controller.data_radar_controller as data_radar_controller
 import plotly.express as px
@@ -20,8 +20,8 @@ mid_area_size = 40
 
 
 def get_data(data_folder_path, file_number=0):
-    list_data_file = read_file_pandas.get_list_file(data_folder_path)
-    data = list(read_file_pandas.read_file(list_data_file[file_number], 1).index)
+    list_data_file = file_pandas.get_list_file(data_folder_path)
+    data = list(file_pandas.read_file(list_data_file[file_number], 1).index)
     data_np = np.asarray(data, dtype=np.float64)
     return data_np
 
@@ -100,6 +100,24 @@ def test():
     fig.show()
     fig2.show()
 
+def read_matlab_data():
+    import utils_v1.file_utils.file_pandas as read_file_pandas
+    parent_folder= "E:\\lab_project\\hr_processing\\data\\data_gen"
+    freq_file=parent_folder + "\\"+"\\frequency.csv"
+    data_folder=parent_folder+ "\\"+"\\data"
+    list_file= read_file_pandas.get_list_file(data_folder)
+
+    #======read frequency====
+    freq_list=read_file_pandas.read_csv_file(freq_file)
+    freq_list=freq_list.freq[0:9]
+
+    chosen_file=list_file[0]
+    data=read_file_pandas.read_csv_file(chosen_file)
+    data = data.data
+    print(data)
+    time=np.arange(0, 20, 0.01)
+    fig=px.line(x=time, y=data, title='test')
+    fig.show()
 
 if __name__ == '__main__':
     band_hr = (0.93, 2.23)
@@ -108,38 +126,5 @@ if __name__ == '__main__':
     mtime = 20
     snr = -10
     sig_gen = sng.SignalGenerate(band_hr=band_hr, band_rr=band_rr, snr=snr, fs=fs, mtime=mtime)
-    data = sig_gen.gen_raw_singal()
+    read_matlab_data()
 
-    mtime_x = np.arange(0, mtime * 100, 1)
-    filter_data = btwf.butter_bandpass_filter(data[6, :])
-    peaks = btwf.find_hr(data[6, :], order=3)
-
-    radar_gen = sng.RadarGen(0.83, 0.167)
-    i_sig = radar_gen.radar_data_gen()
-
-    # plot_with_peaks(x=np.arange(0, 2000, 1), y=i_sig[2,:], peaks=[], name='demo')
-
-    data_f = fft(data[2, :])
-    xf = fftfreq(len(data_f), 1)
-
-    plot_with_peaks(x=xf, y=np.abs(data_f[0:len(data_f)]), peaks=[], name='test')
-    # plot_with_peaks(x=xf, y=np.abs(data_f[0:len(data_f)]), peaks=[], name='test')
-
-    # hb = sig_gen.hb
-    # hb_noise = sig_gen.hb_noise
-
-    # plot2(mtime_x, hb[6, :], hb_noise[6, :], 'test')
-    # plot2(mtime_x, data[6, :], [], 'data')
-    # plot_with_peaks(x=mtime_x, y=filter_data / np.max(np.abs(filter_data)), peaks=peaks, name='radar data with peak')
-    # numsig = mtime * fs
-    # for i in range(0, 5):
-    #     print('====Step {}========'.format(i))
-    #     sig_handle = sng.SignalHandle()
-    #     sig_gen = sng.SignalGenerate(band_hr=band_hr, band_rr=band_rr, snr=snr, fs=fs, mtime=mtime)
-    #     data = sig_gen.gen_raw_singal()
-    #     for col in range(0, numsig):
-    #         filter_data = btwf.butter_bandpass_filter(data[:, col])
-    #         peaks = btwf.find_hr(data[:, col])
-    #         label = len(peaks) * 3
-    #         print(label)
-    #         sig_handle.save_data_with_label(filter_data, label)

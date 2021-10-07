@@ -3,7 +3,7 @@ from scipy.signal import butter
 from scipy.signal import lfilter
 
 
-def butter_bandpass_filter(data, lowcut=0.83, highcut=2.33, fs=100, order=5):
+def butter_bandpass_filter(data, lowcut=0.83, highcut=2.33, fs=100, order=3):
     nyq = 0.5 * fs
     low = lowcut / nyq
     high = highcut / nyq
@@ -21,10 +21,10 @@ def butter_lowpass_filter(data, fs=100, fr=0.5, order=5):
 
 
 # Loc tin hieu nhip tim
-def find_hr(data, lowcut=0.83, highcut=2.33, fs=100, order=5, distance=60, width=0.3):
+def find_hr(data, lowcut=0.83, highcut=2.33, fs=100, order=3, distance=400, width=0.3, prominence=0.5):
     hr = butter_bandpass_filter(data, lowcut=lowcut, highcut=highcut, fs=fs, order=order)
-    threshold_hr = (max(hr) - min(hr)) * 0.01  # muc nguong
-    peaks, _ = ss.find_peaks(hr, distance=distance, height=threshold_hr, width=width)
+    threshold_hr = (max(hr) - min(hr)) * 0.002  # muc nguong
+    peaks, _ = ss.find_peaks(hr, distance=distance, height=threshold_hr, width=width, prominence=prominence)
     return peaks
 
 
