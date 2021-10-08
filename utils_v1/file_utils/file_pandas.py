@@ -15,7 +15,8 @@ def read_csv_file(file_path):
     import pandas as pd
     return pd.read_csv(file_path)
 
-# def write_csv_file(file_path, name_cols, data):
-#     with open(file_path) as f:
-#         writer=csv.writer(f)
-#         writer.writerow(row)
+def write_csv_file(file_path, row):
+    with open(file_path, 'w', newline='') as f:
+        writer=csv.writer(f)
+        writer.writerow(row)
+    f.close()
