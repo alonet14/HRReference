@@ -73,19 +73,23 @@ class RadarGenV2():
             data_heart.append(heart_val)
         return data_heart
 
-    def vibration_target(self, am_hb=0.07 * 10 * pow(10, -3), fhb=1.0, am_res=10 * pow(10, -3), te=2, ti=2):
+    def vibration_target(self, am_hb= 1* pow(10, -3), fhb=1.5, am_res=10 * pow(10, -3), te=2, ti=2, snr=30):
         phase_hb = 2 * np.pi * np.random.rand()
         res_val = self.gen_respirator_v1(am=am_res, kb=am_res, ti=ti, te=te, tc=0.8)
         hb_val = self.gen_heartbeat_movement_signal_v1(am=am_hb, freq=fhb, phase=phase_hb)
-        signal_hb_res = am_res + am_hb - (np.asarray(res_val) + np.asarray(hb_val))
-        return signal_hb_res
+        chess_vibra =  am_hb + np.asarray(res_val) + np.asarray(hb_val)
+        linear_snr = control.db2mag(snr)
+        awgn = AWGNChannel(snr=linear_snr, signal_power='measured')
+        chess_vibra = awgn(chess_vibra)
+        self.location_target = chess_vibra
+        self.hb_val=hb_val
+        self.res_val=res_val
+        return chess_vibra
 
-    def i_signal(self, normal_distance_target=30 * pow(10, -2), snr=-10):
+    def i_signal(self, normal_distance_target=30 * pow(10, -2), fhb=1.0, te=2, ti=2, snr=-10):
         # unit: meter
         # snr in db
-        location_target = self.vibration_target()
-        self.location_target = location_target
-
+        location_target = self.vibration_target(fhb=fhb, te=te, ti=ti)
         c = 3 * pow(10, 8)
         f_carrying_wave = 24 * pow(10, 9)
         wavelength = c / f_carrying_wave
@@ -95,7 +99,7 @@ class RadarGenV2():
         linear_snr = control.db2mag(snr)
         awgn = AWGNChannel(snr=linear_snr, signal_power='measured')
         for instantous_location in location_target:
-            i_val = 3.5 * np.cos(constant_phase_shift + 4 * np.pi * instantous_location / wavelength)
+            i_val = 5 * np.cos(constant_phase_shift + 4 * np.pi * instantous_location / wavelength)
             i_data.append(i_val)
         i_data = awgn(i_data)
         return i_data
@@ -103,6 +107,6 @@ class RadarGenV2():
     def filter_i_signal(self):
         normal_distance_target = 30 * pow(10, -2)
         snr = -10
-        i_signal = self.i_signal(normal_distance_target, snr)
+        i_signal = self.i_signal(normal_distance_target)
         filtered_signal = btwf.butter_bandpass_filter(data=i_signal, order=3)
         return filtered_signal
