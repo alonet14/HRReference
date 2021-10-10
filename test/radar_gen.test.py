@@ -4,6 +4,7 @@ from utils_v1 import butterworth_filter as btwf
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
+import utils_v1.file_utils.file_pandas as fd
 # peaks = btwf.find_hr(data=signal_hb_res, fs=radar_gen.fs, order=3, distance=50, prominence=1)
 # print(len(peaks)*3)
 # time_arr_resp = np.arange(0, len(signal_hb_res), 1)
@@ -28,12 +29,14 @@ file_path = '../data/recorded_data_gen/data.csv'
 
 fre_hb_gen = 50
 
-for i in range(2):
+#chay tu 50 - 140
+for i in range(90):
     label=np.zeros(90)
     label[i]=1
     radar_gen = RadarGenV2(fs=100, mtime=20)
     data_list=[]
-    for j in range(50):
+    quantity_signal_per_label=50
+    for j in range(quantity_signal_per_label):
         signal_hb_res = radar_gen.i_signal(fhb=fre_hb_gen, te=2, ti=2, snr=0)
         filtered_signal = btwf.butter_bandpass_filter(data=signal_hb_res, fs=radar_gen.fs, order=3)
         filtered_signal = filtered_signal / np.max(np.abs(filtered_signal))
@@ -41,6 +44,11 @@ for i in range(2):
         data_list.append(labeled_filtered_signal)
 
     data_frame=DataFrame(np.array(data_list), columns=['value', 'label'])
-    data_frame.to_csv('D:\\lab_project\\hr_processing\\data\\recorded_data_gen\\data.csv', mode='a', header=False)
-    print(data_frame)
+    path_laptop = 'D:\\lab_project\\hr_processing\\data\\recorded_data_gen\\data{0}.csv'.format("_"+str(fre_hb_gen))
+    path_lab = ''
+    fd.create_file(path_laptop)
+    data_frame.to_csv(path_laptop, mode='w', header=False)
     fre_hb_gen += 1
+
+
+
