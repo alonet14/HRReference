@@ -25,5 +25,5 @@ def write_csv_file(file_path, row):
 def create_file(file_path):
     import os
     if not os.path.isfile(file_path):
-        f=open(file_path, mode='x')
+        f = open(file_path, mode='x')
         f.close()

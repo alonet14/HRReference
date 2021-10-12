@@ -31,8 +31,8 @@ fre_hb_gen = 50
 
 #chay tu 50 - 140
 for i in range(90):
-    label=np.zeros(90)
-    label[i]=1
+    # label=np.zeros(90)
+    # label[i]=1
     radar_gen = RadarGenV2(fs=100, mtime=20)
     data_list=[]
     quantity_signal_per_label=50
@@ -40,14 +40,13 @@ for i in range(90):
         signal_hb_res = radar_gen.i_signal(fhb=fre_hb_gen, te=2, ti=2, snr=0)
         filtered_signal = btwf.butter_bandpass_filter(data=signal_hb_res, fs=radar_gen.fs, order=3)
         filtered_signal = filtered_signal / np.max(np.abs(filtered_signal))
-        labeled_filtered_signal=[filtered_signal, label]
+        labeled_filtered_signal=filtered_signal
         data_list.append(labeled_filtered_signal)
-
-    data_frame=DataFrame(np.array(data_list), columns=['value', 'label'])
+    data_frame = DataFrame(data_list)
     path_laptop = 'D:\\lab_project\\hr_processing\\data\\recorded_data_gen\\data{0}.csv'.format("_"+str(fre_hb_gen))
     path_lab = ''
     fd.create_file(path_laptop)
-    data_frame.to_csv(path_laptop, mode='w', header=False)
+    data_frame.to_csv(path_laptop, mode='w', header=True)
     fre_hb_gen += 1
 
 
